@@ -4,17 +4,23 @@ import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } fr
 import { getMessaging, isSupported } from 'firebase/messaging';
 
 // ─── IMPORTANT ────────────────────────────────────────────────────────────────
-// Replace these placeholder values with your actual Firebase project credentials.
-// Find them in: Firebase Console → Project Settings → General → Your Apps → SDK Setup
+// Firebase project credentials are loaded from Vite environment variables.
+// Create `.env.local` from `.env.example` and keep it out of source control.
 // ─────────────────────────────────────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey: "AIzaSyAriElO5tvuWrDJTyQXnxDRKnlHDASsHJc",
-  authDomain: "guff-1d17e.firebaseapp.com",
-  projectId: "guff-1d17e",
-  storageBucket: "guff-1d17e.firebasestorage.app",
-  messagingSenderId: "973034159993",
-  appId: "1:973034159993:web:be5dae0df211b1dd6039a8"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
+
+if (!firebaseConfig.apiKey) {
+  throw new Error(
+    'Missing Firebase config values. Copy .env.example to .env.local and fill in VITE_FIREBASE_* variables.'
+  );
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
